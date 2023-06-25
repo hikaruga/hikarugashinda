@@ -1530,7 +1530,7 @@ main {
 /*------------------------------------------------------------------------------------- */
 .p-top__story {
   -webkit-transition: all 1s ease-in-out;
-  background-image: url(hikarugashinda/img/top/story_bg@2x.png);
+  background-image: url(/hikarugashinda/img/top/story_bg@2x.png);
   background-size: cover;
   opacity: 0;
   padding-bottom: min(24.66667vw,123.33333px);
