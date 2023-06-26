@@ -7,7 +7,9 @@
 <body>
   <canvas id="image-canvas"></canvas>
 
+  <!-- Load the ag-psd library -->
   <script src="https://unpkg.com/ag-psd"></script>
+
   <script>
     // Get the PSD URL from the URL query string parameter 'psdUrl'
     const urlParams = new URLSearchParams(window.location.search);
@@ -20,7 +22,7 @@
       xhr.responseType = 'arraybuffer';
       xhr.addEventListener('load', function () {
         const buffer = xhr.response;
-        const psd = agPsd.readPsd(buffer);
+        const psd = ag-psd.readPsd(buffer);
 
         const canvas = document.getElementById('image-canvas');
         canvas.width = psd.children[0].width;
