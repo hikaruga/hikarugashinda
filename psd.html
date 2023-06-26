@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>PSD Viewer</title>
-    <script src="https://unpkg.com/psd"></script>
-  </head>
-  <body>
-    <div id="canvas-container"></div>
-
-    <script>
+<head>
+  <meta charset="UTF-8">
+  <title>PSD Viewer</title>
+  <script src="https://unpkg.com/psd.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const psdUrl = urlParams.get('psdUrl');
-
+      const psdUrl = urlParams.get('psd');
       if (psdUrl) {
-        PSD.fromURL(psdUrl).then(function (psd) {
-          const canvas = psd.canvas;
-          canvas.id = "canvas";
-          document.getElementById("canvas-container").appendChild(canvas);
+        PSD.fromURL(psdUrl).then((psd) => {
+          document.getElementById('ImageContainer').appendChild(psd.image.toPng());
         });
-      } else {
-        console.error('No PSD URL specified in the URL parameters.');
       }
-    </script>
-  </body>
+      
+      // Listen for drag & drop event on document
+      document.addEventListener("drop", (evt) => {
+        evt.preventDefault();
+        PSD.fromEvent(evt).then((psd) => {
+          console.log(psd.tree().export());
+        }); 
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="ImageContainer"></div>
+</body>
 </html>
