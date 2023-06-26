@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>PSD Viewer</title>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+
+    <script src="https://unpkg.com/psd.js"></script>
+    <script>
+      async function openPSDFromURL() {
+        try {
+          const urlParams = new URLSearchParams(window.location.search);
+          const url = urlParams.get('url');
+          if (!url) {
+            throw new Error('PSD URL not provided!');
+          }
+          const psdBuffer = await fetch(url).then(response => response.arrayBuffer());
+          const psd = PSD.fromArrayBuffer(psdBuffer);
+          return psd;
+        } catch (error) {
+          console.error('Error opening PSD:', error);
+        }
+      }
+
+      openPSDFromURL()
+        .then(psd => {
+          console.log('PSD opened successfully!');
+          // Do something with the PSD object...
+
+          const canvas = document.getElementById('canvas');
+          psd.image.saveAsPng(canvas);
+        });
+    </script>
+  </body>
+</html>
