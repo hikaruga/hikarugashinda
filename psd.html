@@ -22,7 +22,7 @@
       xhr.responseType = 'arraybuffer';
       xhr.addEventListener('load', function () {
         const buffer = xhr.response;
-        const psd = ag-psd.readPsd(buffer);
+        const psd = require("ag-psd").readPsd(buffer);
 
         const canvas = document.getElementById('image-canvas');
         canvas.width = psd.children[0].width;
