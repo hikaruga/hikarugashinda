@@ -3,28 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <title>PSD Viewer</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/psd.js/3.4.0/psd.js"></script>
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const psdUrl = urlParams.get('psd');
-      if (psdUrl) {
-        PSD.fromURL(psdUrl).then((psd) => {
-          document.getElementById('ImageContainer').appendChild(psd.image.toPng());
-        });
-      }
-      
-      // Listen for drag & drop event on document
-      document.addEventListener("drop", (evt) => {
-        evt.preventDefault();
-        PSD.fromEvent(evt).then((psd) => {
-          console.log(psd.tree().export());
-        }); 
-      });
-    });
-  </script>
 </head>
 <body>
-  <div id="ImageContainer"></div>
+  <canvas id="image-canvas"></canvas>
+
+  <script src="https://unpkg.com/ag-psd"></script>
+  <script>
+    // Get the PSD URL from the URL query string parameter 'psdUrl'
+    const urlParams = new URLSearchParams(window.location.search);
+    const psdUrl = urlParams.get('psdUrl');
+
+    // Load the PSD file from the URL and display its image
+    if (psdUrl) {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', psdUrl, true);
+      xhr.responseType = 'arraybuffer';
+      xhr.addEventListener('load', function () {
+        const buffer = xhr.response;
+        const psd = agPsd.readPsd(buffer);
+
+        const canvas = document.getElementById('image-canvas');
+        canvas.width = psd.children[0].width;
+        canvas.height = psd.children[0].height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(psd.children[0].canvas, 0, 0);
+      }, false);
+      xhr.send();
+    }
+  </script>
 </body>
 </html>
