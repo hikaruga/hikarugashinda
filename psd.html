@@ -4,34 +4,27 @@
   <meta charset="UTF-8">
   <title>PSD Viewer</title>
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/psd.js/3.4.0/psd.min.js"></script>
+<style>
+  img {
+    width: 100%;
+    height: auto;
+  }
+</style>
 <body>
-  <canvas id="image-canvas"></canvas>
-
-  <!-- Load the ag-psd library -->
-  <script src="https://unpkg.com/ag-psd"></script>
-
   <script>
-    // Get the PSD URL from the URL query string parameter 'psdUrl'
+    // Parse the URL parameters to get the PSD file URL
     const urlParams = new URLSearchParams(window.location.search);
-    const psdUrl = urlParams.get('psdUrl');
+    const psdUrl = urlParams.get('url');
 
-    // Load the PSD file from the URL and display its image
-    if (psdUrl) {
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', psdUrl, true);
-      xhr.responseType = 'arraybuffer';
-      xhr.addEventListener('load', function () {
-        const buffer = xhr.response;
-        const psd = require("ag-psd").readPsd(buffer);
+    var PSD = require('psd');
 
-        const canvas = document.getElementById('image-canvas');
-        canvas.width = psd.children[0].width;
-        canvas.height = psd.children[0].height;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(psd.children[0].canvas, 0, 0);
-      }, false);
-      xhr.send();
-    }
+    // Load from URL
+    PSD.fromURL(psdUrl).then(function(psd) {
+      document.getElementById('ImageContainer').appendChild(psd.image.toPng());
+    });
   </script>
+
+  <div id="ImageContainer"></div>
 </body>
 </html>
